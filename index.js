@@ -28,6 +28,14 @@ const logger = createLogger({
   ],
 });
 
+if (process.env.NODE_ENV !== 'production') {
+  logger.add(
+    new transports.Console({
+      format: format.simple(),
+    }),
+  );
+}
+
 function error(status, msg) {
   const err = new Error(msg);
   err.status = status;
@@ -39,8 +47,9 @@ const validateInput = function validateUsernameAndPassword(req, res, next) {
   const { password } = req.body;
 
   if (username === undefined || password === undefined) {
-    logger.error("Expected 'username' and 'password'");
-    next(error(400, "Expected 'username' and 'password'"));
+    const errorMsg = "Expected 'username' and 'password'";
+    logger.error(errorMsg);
+    next(error(400, errorMsg));
   } else {
     next();
   }
@@ -94,4 +103,4 @@ app.use((err, req, res, next) => {
   res.send({ error: err.message });
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => logger.info(`Example app listening on port ${port}!`));
