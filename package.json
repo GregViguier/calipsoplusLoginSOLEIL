@@ -1,0 +1,22 @@
+{
+  "name": "calipsologinsoleil",
+  "version": "1.0.0",
+  "description": "Calipsoplus Login for SOLEIL LDAP",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "GregViguier",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.0",
+    "ldapjs": "^1.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-prettier": "^3.1.0"
+  }
+}
