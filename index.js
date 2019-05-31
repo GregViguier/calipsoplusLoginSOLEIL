@@ -67,11 +67,12 @@ app.post('/login', validateInput, async (req, res, next) => {
   });
 
   const bindAsync = promisify(client.bind).bind(client);
+
   try {
     await bindAsync(baseDN, jra2LdapSecret);
   } catch (err) {
     logger.error(err);
-    return next(error(400, 'Cannot bind LDAP'));
+    return next(error(400, 'Cannot bind LDAP with JRA2 service account'));
   }
 
   const opts = {
@@ -80,20 +81,20 @@ app.post('/login', validateInput, async (req, res, next) => {
     attributes: ['dn'],
   };
 
-  client.search(rootDN, opts, (_, searchRes) => {
-    searchRes.once('searchEntry', (entry) => {
+  await client.search(rootDN, opts, (_, searchRes) => {
+    searchRes.once('searchEntry', async (entry) => {
       const { dn } = entry.object;
-      client.bind(dn, password, (bindErr) => {
-        if (bindErr) {
-          logger.error(`User ${dn} not authorized (incorrect password)`);
-          next(error(401, 'Unauthorized'));
-        } else {
-          res.status(status).send(message);
-        }
-      });
+      try {
+        await bindAsync(dn, password);
+      } catch (err) {
+        logger.error(`User ${dn} not authorized (incorrect password)`);
+        return next(error(401, 'Unauthorized'));
+      }
+      client.unbind();
+      return res.status(status).send(message);
     });
-    searchRes.on('end', () => client.unbind());
   });
+  return 1;
 });
 
 // Custom Express Error Handler
