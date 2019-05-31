@@ -4,7 +4,7 @@ const { promisify } = require('util');
 
 // Express
 const app = express();
-const port = 7001;
+const port = 7000;
 app.use(express.json()); // for parsing application/json
 
 // LDAP
