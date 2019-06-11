@@ -9,8 +9,10 @@
   "author": "GregViguier",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^8.0.0",
     "express": "^4.17.0",
     "ldapjs": "^1.0.2",
+    "normalize-port": "^1.0.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {
